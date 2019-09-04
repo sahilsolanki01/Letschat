@@ -21,11 +21,9 @@ public class StarterApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                 .applicationId("3ebe3baf88fa1acb72e76ba96a1f7078def4984e")
                 .clientKey("73a2efc86bb6ce7da1ea79a3ac8c3ac4618a21fa")
-                .server("http://18.219.132.8:80/parse/")
+                .server("http://3.16.123.166:80/parse/")
                 .build()
         );
-
-
 
 
         //ParseUser.enableAutomaticUser();

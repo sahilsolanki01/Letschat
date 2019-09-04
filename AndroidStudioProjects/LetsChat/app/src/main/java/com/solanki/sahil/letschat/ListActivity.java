@@ -1,7 +1,6 @@
 package com.solanki.sahil.letschat;
 
 
-
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 
 
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -25,7 +23,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity{
+public class ListActivity extends AppCompatActivity {
     ArrayList<String> list;
     ArrayAdapter arrayAdapter;
     ListView listView;
@@ -46,12 +44,12 @@ public class ListActivity extends AppCompatActivity{
             public boolean onQueryTextChange(String newText) {
                 ArrayList<String> tempList = new ArrayList();
 
-                for(String temp : list){
-                    if(temp.toLowerCase().contains(newText.toLowerCase())){
+                for (String temp : list) {
+                    if (temp.toLowerCase().contains(newText.toLowerCase())) {
                         tempList.add(temp);
                     }
                 }
-                ArrayAdapter adapter = new ArrayAdapter(ListActivity.this,android.R.layout.simple_list_item_1,tempList);
+                ArrayAdapter adapter = new ArrayAdapter(ListActivity.this, android.R.layout.simple_list_item_1, tempList);
                 listView.setAdapter(adapter);
 
                 return true;
@@ -71,14 +69,13 @@ public class ListActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.logout){
+        if (item.getItemId() == R.id.logout) {
             ParseUser.logOut();
             finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -91,38 +88,43 @@ public class ListActivity extends AppCompatActivity{
         listView = findViewById(R.id.listView);
         list = new ArrayList<>();
         list.clear();
-        arrayAdapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-                intent.putExtra("username",list.get(position));
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra("username", list.get(position));
                 startActivity(intent);
             }
         });
 
 
-
         ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
-        parseQuery.whereNotEqualTo("username",ParseUser.getCurrentUser().getUsername());
+        parseQuery.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
         parseQuery.addAscendingOrder("username");
 
         parseQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
-                if(e==null){
-                    if(objects.size()>0){
-                        for(ParseUser user:objects){
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseUser user : objects) {
                             list.add(user.getUsername());
                         }
                         listView.setAdapter(arrayAdapter);
                     }
-                }else{
+                } else {
                     e.printStackTrace();
                 }
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
+    }
+
 }
 
